@@ -2,16 +2,17 @@ import java.awt.Color;
 
 import javax.swing.JButton;
 
-import javafx.scene.effect.ColorAdjust;
+
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Node extends JButton implements ActionListener {
+    Node parent;
    int col;
    int row;
    int gCost;
-   int hCosht;
+   int hCost;
    int fCost;
    boolean start;
    boolean goal;
@@ -45,6 +46,26 @@ public class Node extends JButton implements ActionListener {
 
    public void setAsSolidNode(){
        this.setBackground(Color.BLACK);
+       solid = true;
+   }
+
+
+   public void setAsOpen(){
+       open = true;
+   }
+
+   public void setAsChecked(){
+       if(start == false && goal == false){
+            this.setBackground(Color.ORANGE);
+            this.setForeground(Color.BLACK);
+       }
+
+       checked = true;
+   }
+
+   public void setAsPath(){
+       this.setBackground(Color.GREEN);
+       this.setForeground(Color.BLACK);
    }
 
 
