@@ -69,11 +69,11 @@ public class Node extends JButton implements ActionListener {
    }
 
 
-@Override
-public void actionPerformed(ActionEvent e) {
-    this.setBackground(Color.ORANGE);
-    
-}
 
+   @Override
+   public void actionPerformed(ActionEvent e) {
+       this.setBackground(Color.ORANGE);
+       
+   }
     
 }   

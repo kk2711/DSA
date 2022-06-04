@@ -18,6 +18,7 @@ public class KeyHandler implements KeyListener{
         int key = e.getKeyCode();
         if(key == KeyEvent.VK_ENTER){
             wp.search();
+           // wp.autoSearch();
         }
     }
 

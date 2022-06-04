@@ -15,7 +15,7 @@ public class WindowPanel extends JPanel {
     final int nodeSize = 70;
     final int maxScreenWidth = nodeSize * maxCol;
     final int maxScreenHeight = nodeSize * maxRow;
-
+    int step = 0;
 
     // NODES
     Node[][] node = new Node[maxCol][maxRow];
@@ -87,11 +87,12 @@ private void setStartNode(int col, int row){
 
 private void setGoalNode(int col, int row){
     node[col][row].setAsGoalNode();
+    goalNode = node[col][row];
 }
 
 private void setSolidNode(int col, int row){
     node[col][row].setAsSolidNode();
-    goalNode = node[col][row];
+    
 }
 
 private void setCostOnNode(){
@@ -133,7 +134,7 @@ private void getCost(Node node){
 }
 
 public void search(){
-    if(goalReached == false){
+    if(goalReached == false && step < 300){
         int col = currentNode.col;
         int row = currentNode.row;
 
@@ -188,6 +189,71 @@ public void search(){
             goalReached = true;
         }
     }
+
+    step++;
+}
+
+
+public void autoSearch(){
+    while(goalReached == false && step < 300){
+        int col = currentNode.col;
+        int row = currentNode.row;
+
+        currentNode.setAsChecked();
+        checkedList.add(currentNode);
+        openList.remove(currentNode);
+
+       	// OPEN THE UP NODE
+			if(row - 1 >= 0){
+				openNode(node[col][row-1]);
+			}
+			
+			// OPEN THE LEFT NODE
+			if(col - 1 >= 0){
+				openNode(node[col-1][row]);
+			}
+			
+			//OPEN THE DOWN NODE
+			if(row + 1 < maxRow){
+				openNode(node[col][row+1]);
+			}
+			
+			//OPEN THE RIGHT NODE
+			if(col + 1 < maxCol){
+				openNode(node[col+1][row]);
+			}
+			
+
+        // FINT THE BEST NODE
+        int bestNodeIndex = 0;
+        int bestNodefCost =  999;
+
+        for(int i = 0; i < openList.size(); i++){
+
+            // Check if this node's fcost is better
+            if(openList.get(i).fCost < bestNodefCost){
+                bestNodeIndex = i;
+                bestNodefCost = openList.get(i).fCost;
+            }
+            // If F cost is equal, check the G cost
+            else if(openList.get(i).fCost == bestNodefCost){
+                if(openList.get(i).gCost < openList.get(bestNodeIndex).gCost){
+                    bestNodeIndex = i;
+                }
+            }
+        }
+
+        // After the loop, we get The best node whick is our next step
+        currentNode = openList.get(bestNodeIndex);
+
+        if(currentNode == goalNode){
+            goalReached = true;
+            trackThePath();
+        }
+        step++;
+    }
+
+   
 }
 
 private void openNode(Node node){
@@ -204,6 +270,19 @@ private void openNode(Node node){
     }
 }
 
+private void trackThePath(){
+
+    // Backtrack the node and draw the path
+    Node current = goalNode;
+
+    while(current != startNode){
+        current = current.parent;
+
+        if(current != startNode){
+            current.setAsPath();
+        }
+    }
+}
 }
 
 
